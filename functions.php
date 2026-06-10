@@ -16,3 +16,16 @@ function rwaqtheme_assets() {
   wp_enqueue_script('rwaqtheme-main', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'rwaqtheme_assets');
+
+function rwaqtheme_language_attributes($output, $doctype) {
+  if ('html' === $doctype) {
+    $output = preg_replace('/lang="[^"]*"/', 'lang="ar"', $output);
+
+    if (strpos($output, 'dir=') === false) {
+      $output .= ' dir="rtl"';
+    }
+  }
+
+  return $output;
+}
+add_filter('language_attributes', 'rwaqtheme_language_attributes', 10, 2);

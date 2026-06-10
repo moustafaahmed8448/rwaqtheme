@@ -16,6 +16,8 @@ body {
   margin: 0;
   color: #222;
   background: #fff;
+  direction: rtl;
+  text-align: right;
 }
 
 .container {
