@@ -11,7 +11,7 @@ Requires PHP: 8.0
 Text Domain: rwaqtheme
 */
 
-body {
+body.rtl {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   color: #222;

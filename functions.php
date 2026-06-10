@@ -18,14 +18,23 @@ function rwaqtheme_assets() {
 add_action('wp_enqueue_scripts', 'rwaqtheme_assets');
 
 function rwaqtheme_language_attributes($output, $doctype) {
-  if ('html' === $doctype) {
-    $output = preg_replace('/lang="[^"]*"/', 'lang="ar"', $output);
-
-    if (strpos($output, 'dir=') === false) {
-      $output .= ' dir="rtl"';
-    }
+  if ('html' !== $doctype || is_admin()) {
+    return $output;
   }
+
+  $output = preg_replace('/lang="[^"]*"/', 'lang="ar"', $output);
+  $output = preg_replace('/\sdir="[^"]*"/', '', $output);
+  $output .= ' dir="rtl"';
 
   return $output;
 }
 add_filter('language_attributes', 'rwaqtheme_language_attributes', 10, 2);
+
+function rwaqtheme_body_class($classes) {
+  if (!is_admin()) {
+    $classes[] = 'rtl';
+  }
+
+  return $classes;
+}
+add_filter('body_class', 'rwaqtheme_body_class');
