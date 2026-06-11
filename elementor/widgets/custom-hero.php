@@ -1,12 +1,18 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Rwaq_Custom_Hero_Widget extends \Elementor\Widget_Base {
+class rwaq_custom_hero_widget extends \Elementor\Widget_Base {
 
     public function get_name() { return 'rwaq_custom_hero'; }
     public function get_title() { return esc_html__( 'Rwaq Custom Hero', 'rwaqtheme' ); }
     public function get_icon() { return 'eicon-banner'; }
-    public function get_categories() { return [ 'general' ]; }
+
+    /**
+     * Correctly routes this widget directly into your custom sidebar section
+     */
+    public function get_categories() { 
+        return [ 'rwaq-category' ]; 
+    }
 
     protected function register_controls() {
         $this->start_controls_section(
@@ -16,7 +22,7 @@ class Rwaq_Custom_Hero_Widget extends \Elementor\Widget_Base {
 
         $this->add_control(
             'title',
-            [ 'label' => esc_html__( 'Heading', 'rwaqtheme' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'Auntri Style Framework' ]
+            [ 'label' => esc_html__( 'Heading', 'rwaqtheme' ), 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'test Style Framework' ]
         );
 
         $this->end_controls_section();
@@ -27,3 +33,4 @@ class Rwaq_Custom_Hero_Widget extends \Elementor\Widget_Base {
         echo '<div class="rwaq-hero-box"><h1>' . esc_html( $settings['title'] ) . '</h1></div>';
     }
 }
+

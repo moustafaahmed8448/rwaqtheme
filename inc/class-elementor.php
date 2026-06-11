@@ -4,16 +4,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Rwaq_Elementor_Manager {
 
     public function __construct() {
-        // Run setup hooks only if Elementor plugin is active
-        if ( did_action( 'elementor/loaded' ) ) {
-            add_action( 'elementor/widgets/register', [ $this, 'register_all_widgets' ] );
-        }
+        // Elementor v3.5+ uses 'elementor/elements/categories_registered'
+        add_action( 'elementor/elements/categories_registered', [ $this, 'register_rwaq_category' ] );
+        add_action( 'elementor/widgets/register', [ $this, 'register_all_widgets' ] );
     }
 
+    /**
+     * Registers a custom category section safely in the Elementor sidebar
+     */
+    public function register_rwaq_category( $elements_manager ) {
+        $elements_manager->add_category(
+            'rwaq-category',
+            [
+                'title' => esc_html__( 'Rwaq Widgets', 'rwaqtheme' ),
+                'icon'  => 'eicon-font',
+            ]
+        );
+    }
+
+    /**
+     * Scans and loads your widgets reliably
+     */
     public function register_all_widgets( $widgets_manager ) {
         $widgets_dir = get_template_directory() . '/elementor/widgets/*.php';
-        
-        // Dynamic Scanner: Automatically finds all PHP files in the folder
         $files = glob( $widgets_dir );
 
         if ( empty( $files ) ) return;
@@ -21,10 +34,11 @@ class Rwaq_Elementor_Manager {
         foreach ( $files as $file ) {
             require_once $file;
 
-            // Generate the expected class name based on the file name
-            // Example: "custom-hero.php" looks for a class named "Rwaq_Custom_Hero_Widget"
             $file_name = basename( $file, '.php' );
-            $class_name = 'Rwaq_' . str_replace( '-', '_', ucwords( $file_name, '-' ) ) . '_Widget';
+            
+            
+            $clean_name = str_replace( '-', '_', strtolower( $file_name ) );
+            $class_name = 'Rwaq_' . $clean_name . '_Widget';
 
             if ( class_exists( $class_name ) ) {
                 $widgets_manager->register( new $class_name() );
