@@ -1,4 +1,23 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+
+
+// Pull in the core theme engine
+if ( file_exists( get_template_directory() . '/inc/class-main.php' ) ) {
+    require_once get_template_directory() . '/inc/class-main.php';
+}
+
+
+
+// Start the theme application
+if ( class_exists( 'Rwaq_Theme_Main' ) ) {
+    Rwaq_Theme_Main::get_instance();
+}
+
+
+
+
 
 function rwaqtheme_setup() {
   add_theme_support('title-tag');
